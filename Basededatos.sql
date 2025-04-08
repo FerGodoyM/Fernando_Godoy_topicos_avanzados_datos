@@ -43,6 +43,17 @@ CREATE TABLE Productos (
     Precio NUMBER
 );
 
+-- Crear tabla DetallesPedidos
+CREATE TABLE DetallesPedidos (
+DetalleID NUMBER PRIMARY KEY,
+PedidoID NUMBER,
+ProductoID NUMBER,
+Cantidad NUMBER,
+CONSTRAINT fk_detalle_pedido FOREIGN KEY (PedidoID) REFERENCES Pedidos(PedidoID),
+CONSTRAINT fk_detalle_producto FOREIGN KEY (ProductoID) REFERENCES
+Productos(ProductoID)
+);
+
 -- Insertar datos en Clientes
 INSERT INTO Clientes VALUES (1, 'Juan Perez', 'Santiago', TO_DATE('1990-05-15', 'YYYY-MM-DD'));
 INSERT INTO Clientes VALUES (2, 'María Gomez', 'Valparaiso', TO_DATE('1985-10-20', 'YYYY-MM-DD'));
@@ -57,6 +68,10 @@ INSERT INTO Pedidos VALUES (103, 2, 800, TO_DATE('2025-03-03', 'YYYY-MM-DD'));
 INSERT INTO Productos VALUES (1, 'Laptop', 1200);
 INSERT INTO Productos VALUES (2, 'Mouse', 25);
 
+-- Insertar datos
+INSERT INTO DetallesPedidos VALUES (1, 101, 1, 2); -- Pedido 101: 2 Laptops
+INSERT INTO DetallesPedidos VALUES (2, 101, 2, 5); -- Pedido 101: 5 Mouse
+
 -- Confirmar creación e inserción de datos
 SELECT 'Tablas creadas y datos insertados correctamente.' AS mensaje FROM dual;
 
@@ -64,6 +79,7 @@ SELECT 'Tablas creadas y datos insertados correctamente.' AS mensaje FROM dual;
 SELECT * FROM Clientes;
 SELECT * FROM Pedidos;
 SELECT * FROM Productos;
+SELECT * FROM DetallesPedidos;
 
 -- Commit para asegurar los cambios
 COMMIT;
