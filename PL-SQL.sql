@@ -8,4 +8,8 @@ BEGIN
 	ELSE
 		DBMS_OUTPUT.PUT_LINE('Es bajo' || v_cantidad);
 	END IF;
+EXCEPTION
+	WHEN NO_DATA_FOUND THEN
+		DBMS_OUTPUT.PUTLINE('No se encontraron los datos necesarios' || v_cantidad);
+
 END;
