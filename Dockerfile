@@ -10,6 +10,7 @@ ENV ORACLE_PWD=oracle
 
 # Copiar el script de inicialización
 COPY sesion1.sql /opt/oracle/scripts/startup/
+COPY sesion5.sql /tmp/
 
 # El CMD ya está definido en la imagen base, pero lo especificamos para claridad
 CMD ["sh", "-c", "exec /opt/oracle/runOracle.sh"]
