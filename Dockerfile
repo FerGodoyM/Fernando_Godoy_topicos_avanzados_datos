@@ -12,6 +12,7 @@ ENV ORACLE_PWD=oracle
 COPY sesion1.sql /opt/oracle/scripts/startup/
 COPY sesion5.sql /tmp/
 COPY sesion6.sql /tmp/
+COPY sesion7.sql /tmp/
 
 
 # El CMD ya está definido en la imagen base, pero lo especificamos para claridad
