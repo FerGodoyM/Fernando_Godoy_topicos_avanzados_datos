@@ -132,3 +132,98 @@ sudo ufw allow 2375/tcp
 sudo ufw allow 2376/tcp
 sudo ufw enable
 ```
+
+## Tras conectarnos, pareciera ser que no se han creado las tablas.
+
+Si nos conectamos a la bd mediante el script entregado anteriormente: `sqlplus sys/oracle@//localhost:1521/XE as sysdba`, nos estaremos conectando por defecto a la base de datos Root de Oracle. Por otro lado, si nos fijamos en nuestro script ejecutado al iniciar el container, estamos:
+
+```
+-- Cambiandonos a la base de datos (PDB) XEPDB1 de Oracle
+ALTER SESSION SET CONTAINER = XEPDB1;
+
+-- Creando un nuevo usuario (esquema) para el curso.
+CREATE USER curso_topicos IDENTIFIED BY curso2025;
+
+```
+
+Para poder acceder a nuestras tablas, estando conectados con el script facilitado anteriormente, podemos cambiarnos de base de datos con un:
+
+`ALTER SESSION SET CONTAINER = XEPDB1;`
+
+y luego, para acceder a los datos, anteponiendo el nombre del esquema: `CURSO_TOPICOS`:
+
+```
+SQL> ALTER SESSION SET CONTAINER = XEPDB1;
+
+Session altered.
+
+SQL> SELECT * from CURSO_TOPICOS.Clientes;
+
+ CLIENTEID NOMBRE
+---------- --------------------------------------------------
+CIUDAD                                             FECHANACI
+-------------------------------------------------- ---------
+         1 Juan Perez
+Santiago                                           15-MAY-90
+
+         2 Mar??a Gomez
+Valparaiso                                         20-OCT-85
+
+         3 Ana Lopez
+Santiago                                           10-MAR-95
+
+```
+
+o directamente cambiandonos de esquema:
+
+```
+ALTER SESSION SET CURRENT_SCHEMA = curso_topicos;
+```
+
+### Alternativas
+
+1. Podemos conectarnos utilizando el usuario y contraseña creado en nuestro script: (User: curso_topicos, Pass: curso2025).
+
+`sqlplus curso_topicos/curso2025@//localhost:1521/XEPDB1`
+
+2. Podemos seguir conectandonos con el user y pass creado en el docker-compose, pero debemos cambiar de schema:
+
+```
+bash-4.2$ sqlplus sys/oracle@//localhost:1521/XEPDB1 as sysdba
+
+SQL*Plus: Release 21.0.0.0.0 - Production on Wed Apr 16 20:15:08 2025
+Version 21.3.0.0.0
+
+Copyright (c) 1982, 2021, Oracle.  All rights reserved.
+
+
+Connected to:
+Oracle Database 21c Express Edition Release 21.0.0.0.0 - Production
+Version 21.3.0.0.0
+
+SQL> ALTER SESSION SET CURRENT_SCHEMA = curso_topicos;        
+
+Session altered.
+
+SQL> select * from Clientes;
+
+ CLIENTEID NOMBRE
+---------- --------------------------------------------------
+CIUDAD                                             FECHANACI
+-------------------------------------------------- ---------
+         1 Juan Perez
+Santiago                                           15-MAY-90
+
+         2 Mar??a Gomez
+Valparaiso                                         20-OCT-85
+
+         3 Ana Lopez
+Santiago                                           10-MAR-95
+
+
+SQL> 
+```
+
+
+
+
