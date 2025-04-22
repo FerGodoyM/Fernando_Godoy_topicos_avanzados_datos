@@ -27,22 +27,25 @@ EXEC aumentar_precio_producto(90, 10);
 
 --ejercicio 2
 
-CREATE OR REPLACE PROCEDURE contar_pedidos_cliente(p_cliente_id IN NUMBER, p_pedidos_totales OUT NUMBER) AS
-	BEGIN
-		SELECT SUM(Total) INTO p_pedidos_totales FROM Pedidos
-		WHERE ClienteID = p_cliente_id;
-		
-		IF p_pedidos_totales IS NULL THEN
-			p_pedidos_totales := 0;
-		END IF;
-	END;
-	/
+CREATE OR REPLACE PROCEDURE contar_pedidos_cliente(
+    p_cliente_id IN NUMBER,
+    p_pedidos_totales OUT NUMBER
+) AS
+BEGIN
+    SELECT COUNT(*) INTO p_pedidos_totales
+    FROM Pedidos
+    WHERE ClienteID = p_cliente_id;
 
+    IF p_pedidos_totales IS NULL THEN
+        p_pedidos_totales := 0;
+    END IF;
+END;
+/
 
 DECLARE
 	v_total NUMBER;
 BEGIN
 	contar_pedidos_cliente(1, v_total);
-	DBMS_OUTPUT.PUT_LINE('El total de productos es: ' || v_total)
+	DBMS_OUTPUT.PUT_LINE('El total de productos es: ' || v_total);
 END;
 /
