@@ -87,8 +87,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Insertando datos en Productos...');
     INSERT INTO Productos VALUES (1, 'Laptop', 1200);
     INSERT INTO Productos VALUES (2, 'Mouse', 25);
---Se intenta insertar un dato con una ID ya existente
-    INSERT INTO Productos VALUES (2, 'Audifonos', 20);
     DBMS_OUTPUT.PUT_LINE('Datos insertados en Productos.');
 END;
 /
