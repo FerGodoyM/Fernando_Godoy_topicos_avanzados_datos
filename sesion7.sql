@@ -4,8 +4,14 @@ CREATE OR REPLACE PROCEDURE aumentar_precio_producto(p_producto_id IN NUMBER, p_
 	BEGIN
 		UPDATE Productos
 		SET Precio = Precio * (p_porcentaje/100 + 1)
-		WHERE ProductoID = p_producto_id; 
-		DBMS_OUTPUT.PUT_LINE('El Precio del producto se a actualizado un ' || p_porcentaje ||'%');
+		WHERE ProductoID = p_producto_id;
+ 
+		IF SQL%ROWCOUNT > 0 THEN
+			DBMS_OUTPUT.PUT_LINE('El precio del producto se ha actualizado un ' || p_porcentaje || '%');
+		ELSE
+			DBMS_OUTPUT.PUT_LINE('No se encontró un producto con ese ID');
+		END IF;
+
 	EXCEPTION
 		WHEN NO_DATA_FOUND THEN
 		DBMS_OUTPUT.PUT_LINE('Uno de los valores ingresados no es valido');
