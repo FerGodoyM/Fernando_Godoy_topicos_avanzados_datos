@@ -84,7 +84,7 @@ BEGIN
 END;
 /
 
--- Ejemplo 2: Cursor con tipo de objeto.
+-- Ejemplo 6: Cursor con tipo de objeto.
 
 DECLARE
 	CURSOR cliente_cursor IS
