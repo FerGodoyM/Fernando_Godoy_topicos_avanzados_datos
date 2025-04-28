@@ -7,8 +7,33 @@
 --Empleados.
 
 
+CREATE VIEW PromedioHoras AS
+SELECT DepartamentoID, AVG(Salario) AS Promedio FROM Empleados 
+GROUP BY DepartamentoID;
+
+DECLARE
+	CURSOR c_listar IS
+	SELECT Nombre, Promedio FROM Departamentos
+	RIGHT JOIN PromedioHoras
+	ON Departamentos.DepartamentoID = PromedioHoras.DepartamentoID
+	WHERE Promedio > 600000;
+
+	v_departamento_id Empleados.DepartamentoID%TYPE;
+	v_promedio NUMBER;
 
 
+BEGIN
+	OPEN c_listar;
+	DBMS_OUTPUT.PUT_LINE('---------SE EMPIEZA A LISTAR--------');
+	LOOP
+		FETCH c_listar INTO v_departamento_id, v_promedio;
+		EXIT WHEN c_listar%NOTFOUND;
+		DBMS_OUTPUT.PUT_LINE('ID: '|| v_departamento_id ||', Promedio: ' || v_promedio);
+	END LOOP;
+	DBMS_OUTPUT.PUT_LINE('---------SE TERMINA DE LISTAR--------');
+	CLOSE c_listar;
+END;
+/
 -- EJERCICIO 2
 
 -- Escribe un bloque PL/SQL con un cursor explícito que reduzca
@@ -16,7 +41,34 @@
 -- presupuesto mayor a 1500000. Usa FOR UPDATE y maneja
 -- excepciones.
 
+DECLARE
+	CURSOR c_reducir IS
+	SELECT ProyectoID, Presupuesto FROM Proyectos
+	WHERE Presupuesto > 1500000
+FOR UPDATE OF Proyectos.Presupuesto; --PROBLEMA AQUI
 
+	v_proyecto_id Proyectos.ProyectoID%TYPE;
+	v_presupuesto Proyectos.Presupuesto%TYPE;
+
+BEGIN
+	OPEN c_reducir;
+	LOOP
+		FETCH c_reducir INTO v_proyecto_id, v_presupuesto;
+		EXIT WHEN c_reducir%NOTFOUND;
+
+		UPDATE Proyectos
+		SET Presupuesto = v_presupuesto - (v_presupuesto * 0.05)
+		WHERE ProyectoID = v_proyecto_id;
+
+		v_presupuesto := v_presupuesto - (v_presupuesto * 0.05);
+		DBMS_OUTPUT.PUT_LINE('ID: ' || v_proyecto_id || ', Nuevo precio: ' || v_presupuesto);
+	END LOOP;
+	CLOSE c_reducir;
+EXCEPTION
+	WHEN OTHERS THEN
+		DBMS_OUTPUT.PUT_LINE('OCURRIO UN ERROR !');
+END;
+/
 
 --EJERCICIO 3
 
