@@ -1,5 +1,9 @@
 --ejercicio 1
 
+--Escribe un bloque anónimo que use un cursor
+--explícito para listar 2 atributos de alguna
+--clase, ordenados por uno de los atributos.
+
 DECLARE
 	CURSOR c_personas IS
 		SELECT Nombre, FechaNacimiento FROM Clientes
@@ -21,6 +25,12 @@ END;
 /
 
 --ejercicio 2
+
+--Escribe un bloque anónimo que use un cursor
+--explícito con parámetro para aumentar un 10% el
+--total de la suma de algún atributo numérico de un
+--elemento de una tabla y muestre los valores
+--originales y actualizados. Usa FOR UPDATE.
 
 DECLARE
 	CURSOR c_pedidos (v_pedidosid Pedidos.PedidoID%TYPE) IS

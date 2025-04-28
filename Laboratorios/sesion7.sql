@@ -1,5 +1,11 @@
 --ejercicio 1
 
+--Crea un procedimiento aumentar_precio_producto
+--que reciba un ProductoID y un porcentaje de
+--aumento (como parámetros IN), y aumente el precio
+--del producto en ese porcentaje. Maneja la
+--excepción si el producto no existe.
+
 SET SERVEROUTPUT ON;
 
 CREATE OR REPLACE PROCEDURE aumentar_precio_producto(p_producto_id IN NUMBER, p_porcentaje IN NUMBER) AS
@@ -25,7 +31,15 @@ CREATE OR REPLACE PROCEDURE aumentar_precio_producto(p_producto_id IN NUMBER, p_
 EXEC aumentar_precio_producto(1, 20);
 EXEC aumentar_precio_producto(90, 10);
 
+
+
+
 --ejercicio 2
+
+--Crea un procedimiento contar_pedidos_cliente que
+--reciba un ClienteID (parámetro IN) y devuelva la
+--cantidad de pedidos de ese cliente (parámetro
+--OUT). Si el cliente no tiene pedidos, devuelve 0.
 
 CREATE OR REPLACE PROCEDURE contar_pedidos_cliente(
     p_cliente_id IN NUMBER,

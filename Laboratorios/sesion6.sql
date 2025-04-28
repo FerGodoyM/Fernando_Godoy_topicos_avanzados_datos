@@ -1,5 +1,11 @@
 --ejercicio uno
 
+-- Escribe un bloque anónimo que use un cursor
+--explícito basado en un objeto para listar 2
+--atributos de alguna clase, ordenados por uno de
+--los atributos.
+
+
 CREATE OR REPLACE TYPE cliente_obj AS OBJECT (
   cliente_id NUMBER,
   nombre     VARCHAR2(50),
@@ -42,8 +48,20 @@ BEGIN
   END LOOP;
   CLOSE c_clientes;
 END;
+/
+
+
+
+
 
 --ejecicio dos
+
+--Escribe un bloque anónimo que use un cursor
+--explícito con parámetro basado en un objeto para
+--aumentar un 10% el total de la suma de algún
+--atributo numérico de un elemento de una tabla y
+--muestre los valores originales y actualizados.
+--Usa FOR UPDATE o usa función dentro del objeto
 
 CREATE OR REPLACE TYPE producto_obj AS OBJECT (
   producto_id NUMBER,
