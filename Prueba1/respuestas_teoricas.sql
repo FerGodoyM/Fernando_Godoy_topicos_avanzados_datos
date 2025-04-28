@@ -51,3 +51,4 @@
 -- algunos atributos de cursores serian
 
 -- %NOTFOUND este atributo nos ayuda a terminar de recorrer las filas de un cursor
+-- %ROWTYPE es una variable la cual contiene una fila de una tabla
