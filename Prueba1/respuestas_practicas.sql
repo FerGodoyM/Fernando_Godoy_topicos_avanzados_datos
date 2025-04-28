@@ -18,7 +18,7 @@ DECLARE
 	ON Departamentos.DepartamentoID = PromedioHoras.DepartamentoID
 	WHERE Promedio > 600000;
 
-	v_departamento_id Empleados.DepartamentoID%TYPE;
+	v_nombre Departamentos.Nombre%TYPE;
 	v_promedio NUMBER;
 
 
@@ -26,9 +26,9 @@ BEGIN
 	OPEN c_listar;
 	DBMS_OUTPUT.PUT_LINE('---------SE EMPIEZA A LISTAR--------');
 	LOOP
-		FETCH c_listar INTO v_departamento_id, v_promedio;
+		FETCH c_listar INTO v_nombre, v_promedio;
 		EXIT WHEN c_listar%NOTFOUND;
-		DBMS_OUTPUT.PUT_LINE('ID: '|| v_departamento_id ||', Promedio: ' || v_promedio);
+		DBMS_OUTPUT.PUT_LINE('ID: '|| TO_CHAR(v_nombre) ||', Promedio: ' || TO_CHAR(v_promedio));
 	END LOOP;
 	DBMS_OUTPUT.PUT_LINE('---------SE TERMINA DE LISTAR--------');
 	CLOSE c_listar;
