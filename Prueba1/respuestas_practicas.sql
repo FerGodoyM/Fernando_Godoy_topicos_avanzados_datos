@@ -7,16 +7,13 @@
 --Empleados.
 
 
-CREATE VIEW PromedioHoras AS
-SELECT DepartamentoID, AVG(Salario) AS Promedio FROM Empleados 
-GROUP BY DepartamentoID;
-
 DECLARE
 	CURSOR c_listar IS
-	SELECT Nombre, Promedio FROM Departamentos
-	RIGHT JOIN PromedioHoras
-	ON Departamentos.DepartamentoID = PromedioHoras.DepartamentoID
-	WHERE Promedio > 600000;
+	SELECT Departamentos.Nombre, AVG(e.Salario) As Promedio FROM Departamentos
+	INNER JOIN Empleados e
+	ON Departamentos.DepartamentoID = e.DepartamentoID
+	GROUP BY Departamentos.Nombre
+	HAVING AVG(e.Salario) > 600000;
 
 	v_nombre Departamentos.Nombre%TYPE;
 	v_promedio NUMBER;
@@ -56,11 +53,12 @@ BEGIN
 		FETCH c_reducir INTO v_proyecto_id, v_presupuesto;
 		EXIT WHEN c_reducir%NOTFOUND;
 
+		v_presupuesto := v_presupuesto - (v_presupuesto * 0.05);
+
 		UPDATE Proyectos
-		SET Presupuesto = v_presupuesto - (v_presupuesto * 0.05)
+		SET Presupuesto = v_presupuesto
 		WHERE ProyectoID = v_proyecto_id;
 
-		v_presupuesto := v_presupuesto - (v_presupuesto * 0.05);
 		DBMS_OUTPUT.PUT_LINE('ID: ' || v_proyecto_id || ', Nuevo precio: ' || v_presupuesto);
 	END LOOP;
 	CLOSE c_reducir;
