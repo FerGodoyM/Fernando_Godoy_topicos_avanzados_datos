@@ -63,33 +63,33 @@ END;
 /
 
 -- Insertar datos en Clientes
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Insertando datos en Clientes...');
-    INSERT INTO Clientes VALUES (1, 'Juan Perez', 'Santiago', TO_DATE('1990-05-15', 'YYYY-MM-DD'));
-    INSERT INTO Clientes VALUES (2, 'María Gomez', 'Valparaiso', TO_DATE('1985-10-20', 'YYYY-MM-DD'));
-    INSERT INTO Clientes VALUES (3, 'Ana Lopez', 'Santiago', TO_DATE('1995-03-10', 'YYYY-MM-DD'));
-    DBMS_OUTPUT.PUT_LINE('Datos insertados en Clientes.');
-END;
-/
+-- BEGIN
+--     DBMS_OUTPUT.PUT_LINE('Insertando datos en Clientes...');
+--     INSERT INTO Clientes VALUES (1, 'Juan Perez', 'Santiago', TO_DATE('1990-05-15', 'YYYY-MM-DD'));
+--     INSERT INTO Clientes VALUES (2, 'María Gomez', 'Valparaiso', TO_DATE('1985-10-20', 'YYYY-MM-DD'));
+--     INSERT INTO Clientes VALUES (3, 'Ana Lopez', 'Santiago', TO_DATE('1995-03-10', 'YYYY-MM-DD'));
+--     DBMS_OUTPUT.PUT_LINE('Datos insertados en Clientes.');
+-- END;
+-- /
 
 -- Insertar datos en Pedidos
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Insertando datos en Pedidos...');
-    INSERT INTO Pedidos VALUES (101, 1, 600, TO_DATE('2025-03-01', 'YYYY-MM-DD'));
-    INSERT INTO Pedidos VALUES (102, 1, 300, TO_DATE('2025-03-02', 'YYYY-MM-DD'));
-    INSERT INTO Pedidos VALUES (103, 2, 800, TO_DATE('2025-03-03', 'YYYY-MM-DD'));
-    DBMS_OUTPUT.PUT_LINE('Datos insertados en Pedidos.');
-END;
-/
+-- BEGIN
+--     DBMS_OUTPUT.PUT_LINE('Insertando datos en Pedidos...');
+--     INSERT INTO Pedidos VALUES (101, 1, 600, TO_DATE('2025-03-01', 'YYYY-MM-DD'));
+--     INSERT INTO Pedidos VALUES (102, 1, 300, TO_DATE('2025-03-02', 'YYYY-MM-DD'));
+--     INSERT INTO Pedidos VALUES (103, 2, 800, TO_DATE('2025-03-03', 'YYYY-MM-DD'));
+--     DBMS_OUTPUT.PUT_LINE('Datos insertados en Pedidos.');
+-- END;
+-- /
 
 -- Insertar datos en Productos
-BEGIN
-    DBMS_OUTPUT.PUT_LINE('Insertando datos en Productos...');
-    INSERT INTO Productos VALUES (1, 'Laptop', 1200);
-    INSERT INTO Productos VALUES (2, 'Mouse', 25);
-    DBMS_OUTPUT.PUT_LINE('Datos insertados en Productos.');
-END;
-/
+-- BEGIN
+--     DBMS_OUTPUT.PUT_LINE('Insertando datos en Productos...');
+--     INSERT INTO Productos VALUES (1, 'Laptop', 1200);
+--     INSERT INTO Productos VALUES (2, 'Mouse', 25);
+--     DBMS_OUTPUT.PUT_LINE('Datos insertados en Productos.');
+-- END;
+-- /
 
 -- Confirmar los datos insertados antes de continuar
 COMMIT;
@@ -121,16 +121,195 @@ END;
 /
 
 -- Insertar datos en DetallesPedidos
+-- BEGIN
+--     DBMS_OUTPUT.PUT_LINE('Insertando datos en DetallesPedidos...');
+--     INSERT INTO DetallesPedidos VALUES (1, 101, 1, 2); -- Pedido 101: 2 Laptops
+--     INSERT INTO DetallesPedidos VALUES (2, 101, 2, 5); -- Pedido 101: 5 Mouse
+--     DBMS_OUTPUT.PUT_LINE('Datos insertados en DetallesPedidos.');
+-- END;
+-- /
+
+-- Verificar datos
+SELECT * FROM DetallesPedidos;
+
+-- Crear tabla Inventario
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('Insertando datos en DetallesPedidos...');
-    INSERT INTO DetallesPedidos VALUES (1, 101, 1, 2); -- Pedido 101: 2 Laptops
-    INSERT INTO DetallesPedidos VALUES (2, 101, 2, 5); -- Pedido 101: 5 Mouse
-    DBMS_OUTPUT.PUT_LINE('Datos insertados en DetallesPedidos.');
+    DBMS_OUTPUT.PUT_LINE('Creando tabla Inventario...');
+    EXECUTE IMMEDIATE 'CREATE TABLE Inventario (
+    ProductoID NUMBER PRIMARY KEY,
+    CantidadProductos NUMBER,
+    CONSTRAINT fk_inventario_producto FOREIGN KEY (ProductoID) REFERENCES Productos(ProductoID)
+    )';
+    DBMS_OUTPUT.PUT_LINE('Tabla DetallesPedidos creada.');
 END;
 /
 
 -- Verificar datos
-SELECT * FROM DetallesPedidos;
+SELECT * FROM Inventario;
+
+--Insertar datos en Inventario
+
+-- BEGIN
+--     DBMS_OUTPUT.PUT_LINE('Insertando datos en Inventario...');
+--     INSERT INTO Inventario VALUES (1, 10); -- 10 Laptops
+--     INSERT INTO Inventario VALUES (2, 20); -- 20 Mouse
+--     DBMS_OUTPUT.PUT_LINE('Datos insertados en Inventario.');
+-- END;
+-- /
+
+
+--Creando Tabla Dimensión Cliente
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando tabla Dim_Cliente...');
+    EXECUTE IMMEDIATE 'CREATE TABLE Dim_Cliente (
+        ClienteID NUMBER PRIMARY KEY,
+        Nombre VARCHAR2(50),
+        Ciudad VARCHAR2(50)
+    )';
+    DBMS_OUTPUT.PUT_LINE('Tabla Dim_Cliente creada.');
+END;
+/
+
+
+--Creando Tabla Dimensión Producto
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando tabla Dim_Producto...');
+    EXECUTE IMMEDIATE 'CREATE TABLE Dim_Producto (
+        ProductoID NUMBER PRIMARY KEY,
+        Nombre VARCHAR2(50),
+        Precio NUMBER
+    )';
+    DBMS_OUTPUT.PUT_LINE('Tabla Dim_Producto creada.');
+END;
+/
+
+--Creando Tabla Dimensión Tiempo
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando tabla Dim_Tiempo...');
+    EXECUTE IMMEDIATE 'CREATE TABLE Dim_Tiempo (
+        FechaID NUMBER PRIMARY KEY,
+        Fecha DATE,
+        Año NUMBER,
+        Mes NUMBER,
+        Día NUMBER
+    )';
+    DBMS_OUTPUT.PUT_LINE('Tabla Dim_Tiempo creada.');
+END;
+/
+
+--Creando Tabla Hecho Ventas
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando tabla Hecho_Ventas...');
+    EXECUTE IMMEDIATE 'CREATE TABLE Hecho_Ventas (
+    VentaID NUMBER PRIMARY KEY,
+    PedidoID NUMBER,
+    ClienteID NUMBER,
+    ProductoID NUMBER,
+    FechaID NUMBER,
+    Cantidad NUMBER,
+    Total NUMBER,
+    CONSTRAINT fk_venta_cliente FOREIGN KEY (ClienteID) REFERENCES Dim_Cliente(ClienteID),
+    CONSTRAINT fk_venta_producto FOREIGN KEY (ProductoID) REFERENCES Dim_Producto(ProductoID),
+    CONSTRAINT fk_venta_tiempo FOREIGN KEY (FechaID) REFERENCES Dim_Tiempo(FechaID)
+    )';
+    DBMS_OUTPUT.PUT_LINE('Tabla Hecho_Ventas creada.');
+END;
+/
+
+CREATE SEQUENCE Dim_Tiempo_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE Hecho_Ventas_seq START WITH 1 INCREMENT BY 1;
+
+
+-- Trigger para insertar datos en Dim_Cliente
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando trigger para insertar en Dim_Cliente...');
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE TRIGGER trg_insert_dim_cliente
+    AFTER INSERT ON Clientes
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO Dim_Cliente (ClienteID, Nombre, Ciudad)
+        VALUES (:NEW.ClienteID, :NEW.Nombre, :NEW.Ciudad);
+    END;';
+    DBMS_OUTPUT.PUT_LINE('Trigger creado.');
+END;
+/
+
+-- Trigger para insertar datos en Dim_Producto
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando trigger para insertar en Dim_Producto...');
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE TRIGGER trg_insert_dim_producto
+    AFTER INSERT ON Productos
+    FOR EACH ROW
+    BEGIN
+        INSERT INTO Dim_Producto (ProductoID, Nombre, Precio)
+        VALUES (:NEW.ProductoID, :NEW.Nombre, :NEW.Precio);
+    END;';
+    DBMS_OUTPUT.PUT_LINE('Trigger creado.');
+END;
+/
+
+
+-- Trigger para Dim_Tiempo
+
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando trigger para insertar en Dim_Tiempo...');
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE TRIGGER trg_insert_dim_tiempo
+    AFTER INSERT ON Pedidos
+    FOR EACH ROW
+    DECLARE
+        v_fecha_id NUMBER;
+    BEGIN
+        SELECT COUNT(*) INTO v_fecha_id FROM Dim_Tiempo WHERE Fecha = :NEW.FechaPedido;
+  
+        IF v_fecha_id = 0 THEN
+        INSERT INTO Dim_Tiempo (FechaID, Fecha, Año, Mes, Día)
+        VALUES (
+        Dim_Tiempo_seq.NEXTVAL,
+        :NEW.FechaPedido,
+        EXTRACT(YEAR FROM :NEW.FechaPedido),
+        EXTRACT(MONTH FROM :NEW.FechaPedido),
+        EXTRACT(DAY FROM :NEW.FechaPedido)
+    );
+  END IF;
+END;';
+    DBMS_OUTPUT.PUT_LINE('Trigger creado.');
+END;
+/
+
+-- Trigger para Hecho_Ventas
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Creando trigger para insertar en Hecho_Ventas...');
+    EXECUTE IMMEDIATE 'CREATE OR REPLACE TRIGGER trg_insert_hecho_ventas
+    AFTER INSERT ON DetallesPedidos
+    FOR EACH ROW
+    DECLARE
+        v_fecha DATE;
+        v_fecha_id NUMBER;
+        v_precio NUMBER;
+    BEGIN
+        SELECT FechaPedido INTO v_fecha FROM Pedidos WHERE PedidoID = :NEW.PedidoID;
+
+        SELECT FechaID INTO v_fecha_id FROM Dim_Tiempo WHERE Fecha = v_fecha;
+
+        SELECT Precio INTO v_precio FROM Productos WHERE ProductoID = :NEW.ProductoID;
+
+        INSERT INTO Hecho_Ventas (
+        VentaID, PedidoID, ClienteID, ProductoID, FechaID, Cantidad, Total
+        ) VALUES (
+        Hecho_Ventas_seq.NEXTVAL,
+        :NEW.PedidoID,
+        (SELECT ClienteID FROM Pedidos WHERE PedidoID = :NEW.PedidoID),
+        :NEW.ProductoID,
+        v_fecha_id,
+        :NEW.Cantidad,
+        v_precio * :NEW.Cantidad
+    );END;'
+    DBMS_OUTPUT.PUT_LINE('Trigger creado.');
+END;
+/
+
 
 -- Commit final
 COMMIT;
