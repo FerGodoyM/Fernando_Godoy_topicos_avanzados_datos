@@ -62,34 +62,6 @@ BEGIN
 END;
 /
 
--- Insertar datos en Clientes
--- BEGIN
---     DBMS_OUTPUT.PUT_LINE('Insertando datos en Clientes...');
---     INSERT INTO Clientes VALUES (1, 'Juan Perez', 'Santiago', TO_DATE('1990-05-15', 'YYYY-MM-DD'));
---     INSERT INTO Clientes VALUES (2, 'María Gomez', 'Valparaiso', TO_DATE('1985-10-20', 'YYYY-MM-DD'));
---     INSERT INTO Clientes VALUES (3, 'Ana Lopez', 'Santiago', TO_DATE('1995-03-10', 'YYYY-MM-DD'));
---     DBMS_OUTPUT.PUT_LINE('Datos insertados en Clientes.');
--- END;
--- /
-
--- Insertar datos en Pedidos
--- BEGIN
---     DBMS_OUTPUT.PUT_LINE('Insertando datos en Pedidos...');
---     INSERT INTO Pedidos VALUES (101, 1, 600, TO_DATE('2025-03-01', 'YYYY-MM-DD'));
---     INSERT INTO Pedidos VALUES (102, 1, 300, TO_DATE('2025-03-02', 'YYYY-MM-DD'));
---     INSERT INTO Pedidos VALUES (103, 2, 800, TO_DATE('2025-03-03', 'YYYY-MM-DD'));
---     DBMS_OUTPUT.PUT_LINE('Datos insertados en Pedidos.');
--- END;
--- /
-
--- Insertar datos en Productos
--- BEGIN
---     DBMS_OUTPUT.PUT_LINE('Insertando datos en Productos...');
---     INSERT INTO Productos VALUES (1, 'Laptop', 1200);
---     INSERT INTO Productos VALUES (2, 'Mouse', 25);
---     DBMS_OUTPUT.PUT_LINE('Datos insertados en Productos.');
--- END;
--- /
 
 -- Confirmar los datos insertados antes de continuar
 COMMIT;
@@ -100,10 +72,6 @@ BEGIN
 END;
 /
 
--- Verificar datos
-SELECT * FROM Clientes;
-SELECT * FROM Pedidos;
-SELECT * FROM Productos;
 
 -- Crear tabla DetallesPedidos
 BEGIN
@@ -120,17 +88,6 @@ BEGIN
 END;
 /
 
--- Insertar datos en DetallesPedidos
--- BEGIN
---     DBMS_OUTPUT.PUT_LINE('Insertando datos en DetallesPedidos...');
---     INSERT INTO DetallesPedidos VALUES (1, 101, 1, 2); -- Pedido 101: 2 Laptops
---     INSERT INTO DetallesPedidos VALUES (2, 101, 2, 5); -- Pedido 101: 5 Mouse
---     DBMS_OUTPUT.PUT_LINE('Datos insertados en DetallesPedidos.');
--- END;
--- /
-
--- Verificar datos
-SELECT * FROM DetallesPedidos;
 
 -- Crear tabla Inventario
 BEGIN
@@ -143,20 +100,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Tabla DetallesPedidos creada.');
 END;
 /
-
--- Verificar datos
-SELECT * FROM Inventario;
-
---Insertar datos en Inventario
-
--- BEGIN
---     DBMS_OUTPUT.PUT_LINE('Insertando datos en Inventario...');
---     INSERT INTO Inventario VALUES (1, 10); -- 10 Laptops
---     INSERT INTO Inventario VALUES (2, 20); -- 20 Mouse
---     DBMS_OUTPUT.PUT_LINE('Datos insertados en Inventario.');
--- END;
--- /
-
 
 --Creando Tabla Dimensión Cliente
 BEGIN
@@ -305,7 +248,7 @@ BEGIN
         v_fecha_id,
         :NEW.Cantidad,
         v_precio * :NEW.Cantidad
-    );END;'
+    );END;';
     DBMS_OUTPUT.PUT_LINE('Trigger creado.');
 END;
 /
