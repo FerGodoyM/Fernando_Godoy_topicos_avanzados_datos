@@ -16,3 +16,6 @@ docker-compose exec oracle-db bash
 
 # Iniciar sesión en SQL*Plus
 sqlplus curso_topicos/curso2025@//localhost:1521/XEPDB1
+
+# Iniciar insertador.py
+docker-compose exec data-inserter python insertador.py
