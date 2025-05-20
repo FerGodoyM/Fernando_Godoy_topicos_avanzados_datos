@@ -1,0 +1,11 @@
+FROM python:3.11-slim
+
+# Copiar requirements antes de instalar
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Resto del Dockerfile...
+COPY insertador.py .
+
+CMD ["python", "insertador.py"]
