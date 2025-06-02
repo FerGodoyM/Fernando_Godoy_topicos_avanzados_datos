@@ -9,10 +9,10 @@ cur = conn.cursor()
 
 print("Conexión exitosa a la base de datos Oracle.")
 
-TOTAL_CLIENTES = 500_000
-TOTAL_PRODUCTOS = 1000
-TOTAL_PEDIDOS = 1_000_000
-TOTAL_DETALLES = 2_000_000
+TOTAL_CLIENTES = 500
+TOTAL_PRODUCTOS = 1_000
+TOTAL_PEDIDOS = 1_000
+TOTAL_DETALLES = 2_000
 
 # 1. Insertar CLIENTES
 print("Insertando clientes...")
