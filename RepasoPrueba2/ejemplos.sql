@@ -4,8 +4,7 @@
 --basado en los detalles de los productos y sus cantidades.
 --Parametros: p_pedido_id es el ID del pedido cuyo total se va a actualizar.
 
-CREATE OR REPLACE PROCEDURE
-    actualizar_total_pedido(p_pedido_id IN NUMBER) AS
+CREATE OR REPLACE PROCEDURE actualizar_total_pedido(p_pedido_id IN NUMBER) AS
     v_nuevo_total NUMBER;
 BEGIN
     SELECT SUM(p.Precio * d.Cantidad) INTO v_nuevo_total
