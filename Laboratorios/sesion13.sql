@@ -1,3 +1,89 @@
+
+-- Transacciones y DataWarehouse
+
+-- Las Transacciones son conjunto de operaciones DML que respetan las propiedad ACID
+-- EL DataWarehousees una base de datos optimizada para análisis y reportes, que
+-- almacena datos históricos de múltiples fuentes.
+
+------------------------------EJEMPLOS---------------------------------
+
+-- Procedimiento que inserta un pedido y sus detalles, usando savepoints para manejar
+-- errores parciales.
+
+CREATE OR REPLACE PROCEDURE insertar_pedido_completo(
+    p_pedido_id IN NUMBER,
+    p_cliente_id IN NUMBER,
+    p_detalle_id1 IN NUMBER,
+    p_producto_id1 IN NUMBER,
+    p_cantidad1 IN NUMBER,
+    p_detalle_id2 IN NUMBER,
+    p_producto_id2 IN NUMBER,
+    p_cantidad2 IN NUMBER) AS
+    
+    BEGIN
+    -- Iniciar transacción
+        INSERT INTO Pedidos (PedidoID, ClienteID, Total, FechaPedido)
+        VALUES (p_pedido_id, p_cliente_id, 0, SYSDATE);
+        DBMS_OUTPUT.PUT_LINE('Pedido ' || p_pedido_id || ' insertado.');
+
+        -- Primer savepoint después de insertar el pedido
+        SAVEPOINT pedido_insertado;
+
+        -- Insertar primer detalle
+        INSERT INTO DetallesPedidos (DetalleID, PedidoID, ProductoID, Cantidad)
+        VALUES (p_detalle_id1, p_pedido_id, p_producto_id1, p_cantidad1);
+        DBMS_OUTPUT.PUT_LINE('Primer detalle insertado.');
+
+        -- Segundo savepoint después del primer detalle
+        SAVEPOINT detalle1_insertado;
+
+        -- Insertar segundo detalle (puede fallar si el DetalleID ya existe)
+        INSERT INTO DetallesPedidos (DetalleID, PedidoID, ProductoID, Cantidad)
+        VALUES (p_detalle_id2, p_pedido_id, p_producto_id2, p_cantidad2);
+        DBMS_OUTPUT.PUT_LINE('Segundo detalle insertado.');
+
+        -- Calcular y actualizar el total del pedido
+        UPDATE Pedidos SET Total = (SELECT SUM(p.Precio * d.Cantidad)
+        FROM DetallesPedidos d 
+        JOIN Productos p 
+        ON d.ProductoID = p.ProductoID
+        WHERE d.PedidoID = p_pedido_id)
+        WHERE PedidoID = p_pedido_id;
+
+        -- Confirmar toda la transacción
+        COMMIT;
+        DBMS_OUTPUT.PUT_LINE('Transacción completada y confirmada.');
+    EXCEPTION
+        WHEN DUP_VAL_ON_INDEX THEN
+            DBMS_OUTPUT.PUT_LINE('Error: DetalleID duplicado.');
+            ROLLBACK TO detalle1_insertado;
+            DBMS_OUTPUT.PUT_LINE('Rollback al primer detalle.
+            Segundo detalle no insertado.');
+        COMMIT; -- Confirmar lo que se hizo hasta el primer detalle
+        WHEN OTHERS THEN
+            DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+            ROLLBACK TO pedido_insertado;
+            DBMS_OUTPUT.PUT_LINE('Rollback al pedido. Detalles no
+            insertados.');
+        COMMIT; -- Confirmar solo el pedido
+    END;
+    /
+
+-- Ejecutar
+EXEC insertar_pedido_completo(107, 3, 5, 1, 1, 5, 2, 2);
+EXEC insertar_pedido_completo(108, 3, 6, 1, 1, 7, 2, 2);
+
+-- Explicacion: Inserta un pedido y dos detalles, 
+-- usando savepoints para manejar errores.
+-- Si el segundo detalle falla (por ejemplo,
+-- DetalleID duplicado), revierte al savepoint
+-- detalle1_insertado y confirma el pedido y el
+-- primer detalle.Si ocurre otro error, 
+-- revierte al savepoint pedido_insertado
+-- y confirma solo el pedido.
+
+
+------------------------------EJERCICIOS-------------------------------
 --Crea un procedimiento actualizar_inventario_pedido que reciba un
 --PedidoID (parámetro IN) y reduzca la cantidad de
 --productos en una tabla Inventario (crea la tabla si no existe)
