@@ -1,3 +1,15 @@
+
+GRANT CONNECT, RESOURCE, CREATE SESSION TO curso_topicos;
+GRANT CREATE TABLE, CREATE TYPE, CREATE PROCEDURE TO curso_topicos;
+GRANT UNLIMITED TABLESPACE TO curso_topicos;
+GRANT CREATE ANY TRIGGER TO curso_topicos;
+
+-- Confirmar creación
+SELECT username FROM dba_users WHERE username = 'CURSO_TOPICOS';
+
+-- Cambiar al esquema curso_topicos
+ALTER SESSION SET CURRENT_SCHEMA = curso_topicos;
+
 -- Script para crear y poblar la base de datos para la Prueba 2
 -- Ejecutar en Oracle SQL Developer en el esquema del estudiante
 
